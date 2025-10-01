@@ -16,6 +16,8 @@ app.listen(port, () => {
     );
 });
 
+
+
 const users = {
     users_list: [{
             id: "xyz789",
@@ -44,6 +46,17 @@ const users = {
         }
     ]
 };
+
+const addUser = (user) => {
+    users["users_list"].push(user);
+    return user;
+};
+
+app.post("/users", (req, res) => {
+    const userToAdd = req.body;
+    const adddedUser = addUser(userToAdd);
+    res.send(201).jason(addedUser);
+});
 
 const findUserByName = (name) => {
     return users["users_list"].filter(
