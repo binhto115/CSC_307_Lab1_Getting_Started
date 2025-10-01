@@ -47,47 +47,92 @@ const users = {
     ]
 };
 
-const addUser = (user) => {
-    users["users_list"].push(user);
-    return user;
-};
+// Part 6
+// const addUser = (user) => {
+//     users["users_list"].push(user);
+//     return user;
+// };
 
-app.post("/users", (req, res) => {
-    const userToAdd = req.body;
-    const adddedUser = addUser(userToAdd);
-    res.send(201).jason(addedUser);
-});
+// app.post("/users", (req, res) => {
+//     const userToAdd = req.body;
+//     const addedUser = addUser(userToAdd);
+//     res.send(201).jason(addedUser);
+// });
 
+
+// Part 4
 const findUserByName = (name) => {
     return users["users_list"].filter(
         (user) => user["name"] === name
     );
 };
 
-const findUserById = (id) =>
-    users["users_list"].find((user) => user["id"] === id);
+// const findUserByJob = (job) => {
+//     return users["users_list"].filter(
+//         (user) => user["job"] === job
+//     );
+// };
 
-app.get("/users/:id", (req, res) => {
-    const id = req.params["id"]; //or req.params.id
-    let result = findUserById(id);
-    if (result === undefined) {
-        res.status(404).send("Resource not found.");
-    } else {
-        res.send(result);
-    }
-});
+// app.get("/users", (req, res) => {
+//     res.send(users);
+// });
 
+// Part 5
+// const findUserById = (id) =>
+//     users["users_list"].find((user) => user["id"] === id);
+
+// // Part 7 task 1 (modified part 5)
+// app.delete("/users/:id", (req, res) => {
+//     const id = req.params["id"];
+//     let result = findUserById(id);
+//     if (result == undefined) {
+//         res.status(404).send("User not found.");
+//     } else {
+//         users["users_list"] = users["users_list"].filter(user => user.id !== id);
+//         res.json(result);
+//     }
+// });
+
+
+// app.get("/users/:id", (req, res) => {
+//     const id = req.params["id"]; //or req.params.id
+//     let result = findUserById(id);
+//     if (result === undefined) {
+//         res.status(404).send("Resource not found.");
+//     } else {
+//         res.send(result);
+//     }
+// });
+
+// Part 4
+// app.get("/users", (req, res) => {
+//     const name = req.query.name;
+//     if (name != undefined) {
+//         let result = findUserByName(name);
+//         result = { users_list: result };
+//         res.send(result);
+//     } else {
+//         res.send(users);
+//     }
+// });
+
+// Part 7 Task 2
 app.get("/users", (req, res) => {
     const name = req.query.name;
-    if (name != undefined) {
-        let result = findUserByName(name);
-        result = { users_list: result };
-        res.send(result);
-    } else {
-        res.send(users);
-    }
-});
+    const job = req.query.job;
 
-app.get("/users", (req, res) => {
-    res.send(users);
+    if (name !== undefined && job === undefined) {
+        return res.status(400).json({
+            error: "If 'name' is provided, 'job' must also be provided."
+        });
+    }
+    let filteredUsers = users["users_list"];
+
+    if (name != undefined) {
+        filteredUsers = filteredUsers.filter(user => user.name == name);
+    }
+    if (job != undefined) {
+        filteredUsers = filteredUsers.filter(user => user.job == job);
+    }
+    res.json({ users: filteredUsers });
 });
