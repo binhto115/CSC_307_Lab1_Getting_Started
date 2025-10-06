@@ -1,14 +1,13 @@
 // backend.js
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
 
+app.use(cors());
 app.use(express.json());
 
-// app.get("/", (req, res) => {
-//     res.send("Hello World!");
-// });
 
 app.listen(port, () => {
     console.log(
@@ -94,30 +93,31 @@ const findUserByName = (name) => {
 // });
 
 
-// app.get("/users/:id", (req, res) => {
-//     const id = req.params["id"]; //or req.params.id
-//     let result = findUserById(id);
-//     if (result === undefined) {
-//         res.status(404).send("Resource not found.");
-//     } else {
-//         res.send(result);
-//     }
-// });
+app.get("/users/:id", (req, res) => {
+    const id = req.params["id"]; //or req.params.id
+    let result = findUserById(id);
+    if (result === undefined) {
+        res.status(404).send("Resource not found.");
+    } else {
+        res.send(result);
+    }
+});
 
 // Part 4
-// app.get("/users", (req, res) => {
-//     const name = req.query.name;
-//     if (name != undefined) {
-//         let result = findUserByName(name);
-//         result = { users_list: result };
-//         res.send(result);
-//     } else {
-//         res.send(users);
-//     }
-// });
+app.get("/users", (req, res) => {
+    const name = req.query.name;
+    if (name != undefined) {
+        let result = findUserByName(name);
+        result = { users_list: result };
+        res.send(result);
+    } else {
+        res.send(users);
+    }
+});
 
 // Part 7 Task 2
 app.get("/users", (req, res) => {
+    console.log("✅ Received request from frontend for /users");
     const name = req.query.name;
     const job = req.query.job;
 
