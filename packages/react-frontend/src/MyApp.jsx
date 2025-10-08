@@ -7,28 +7,47 @@ function MyApp() {
     const [characters, setCharacters] = useState([]);
     
     function removeOneCharacter(index) {
-        const updated = characters.filter((character, i) => {
-            return i !== index;
-        });
-        setCharacters(updated);
+        const userToDelete = characters[index];
+
+        fetch(`http://localhost:8000/users/${userToDelete.id}`, {
+            method: "DELETE"
+        })
+        .then((res) => {
+            if (res.status == 204) {
+                const updated = characters.filter((_, i) => i !== index);
+                setCharacters(updated);
+            } else if (res.status == 404) {
+                alert("User not found\n");
+            } else {
+                throw new Error("Failed to delete user\n");
+            }
+        })
+        .catch((error) => console.log(error));
     }
 
     function updateList(person) { 
         postUser(person)
-            .then(() => setCharacters([...characters, person]))
+            .then((res) => {
+                if (res.status == 201) {
+                    return res.json(); // gets the created object
+                } else {
+                    throw new Error(`Failed to add new user. Status: ${res.status}\n`)
+                }
+            })
+            .then((newUser) => setCharacters([...characters, newUser]))
             .catch((error) => {
-            console.log(error);
-        })
+                console.log(error);
+            })
     }
 
     function fetchUsers() {
-        console.log("Fetching users from backend...");
+        console.log("Fetching users from backend...\n");
         const promise = fetch("http://localhost:8000/users");
         return promise;
 
     }
 
-    useEffect(() => {
+    useEffect(() => { 
         fetchUsers()
                 .then((res) => res.json())
                 .then((json) => setCharacters(json["users_list"]))
@@ -36,7 +55,7 @@ function MyApp() {
     }, []);
 
     function postUser(person) {
-        const promise = fetch("Http://localhost:8000/users", {
+        const promise = fetch("http://localhost:8000/users", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
