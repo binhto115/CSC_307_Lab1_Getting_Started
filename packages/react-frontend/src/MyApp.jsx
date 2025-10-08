@@ -17,7 +17,7 @@ function MyApp() {
                 const updated = characters.filter((_, i) => i !== index);
                 setCharacters(updated);
             } else if (res.status == 404) {
-                alert("User not found\n");
+                alert("Resource not found\n");
             } else {
                 throw new Error("Failed to delete user\n");
             }
