@@ -147,5 +147,8 @@ app.get("/users", (req, res) => {
     if (job !== undefined) {
         filteredUsers = filteredUsers.filter(user => user.job === job);
     }
+    if ((name !== undefined || job !== undefined) && filteredUsers.length === 0) {
+        return res.status(404).json("User not found");
+    }
     res.json({ users_list: filteredUsers });
 });
