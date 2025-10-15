@@ -1,21 +1,23 @@
 {
-  "name": "csc-307-app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm --workspace packages/react-frontend run dev"
-  },
-  "author": "",
-  "license": "ISC",
-  "workspaces": [
-    "packages/*"
-  ],
-  "devDependencies": {
-    "nodemon": "^3.1.10"
-  },
-  "dependencies": {
-    "mongoose": "^8.19.1"
-  }
+    "name": "csc-307-app",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "npm --workspace packages/react-frontend run dev"
+    },
+    "author": "",
+    "license": "ISC",
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {
+        "nodemon": "^3.1.10"
+    },
+    "dependencies": {
+        "expressjs-with-mongoose-localdb": "file:../csc-307-db",
+        "mongoose": "^8.19.1"
+    }
 }
